@@ -71,6 +71,12 @@ export class MarkupVisitor extends Visitor {
             const expr = `<div class="q-markup-node-left">${l}</div><span class="q-markup-group-op">${group.op}</span><div class="q-markup-node-right">${r}</div>`;
             return `<div class="q-markup-node">${(depth > 1 ? `<span class="q-markup-group-open">(</span>${expr}<span class="q-markup-group-close">)</span>` : expr)}</div>`;
         }
+        if (!group.right) {
+          const l = this.visit(group.left, depth);
+
+          const expr = `<div class="q-markup-node-left">${l}</div><span class="q-markup-group-op">${group.op}</span><div class="q-markup-node-right">( )</div>`;
+          return `<div class="q-markup-node">${(depth > 1 ? `<span class="q-markup-group-open">(</span>${expr}<span class="q-markup-group-close">)</span>` : expr)}</div>`;
+        }
 
         return `<div class="q-markup-node">${this.visit(group.left, depth)}<div class="q-markup-node">`;
     }
