@@ -1,14 +1,11 @@
-import { Component, Optional, Output, EventEmitter, OnInit, ViewEncapsulation, Input, ElementRef } from '@angular/core';
+import { Component, Optional, Output, EventEmitter, OnInit, Input, ElementRef } from '@angular/core';
 import { Command } from '../infrastructure/command';
-import { clone } from '../infrastructure/utility';
-import { ConditionBuilderService } from './condition-builder.service';
 import { WhereSchema } from './schema/where.schema';
 import { visit as convert } from './schema/converter';
 import { SerializationService, ISerializationNode } from '../expression-builder/serialization.service';
 import { INodeSchema } from '../expression-builder/model/node.schema';
 import { Node } from '../expression-builder/model/node';
 import { EbNodeService } from '../expression-builder/eb-node.service';
-import { EbNodeComponent } from '../expression-builder/eb-node.component';
 import { TraverseService } from '../expression-builder/traverse.service';
 import { ConditionBuilderModel } from './condition-builder.model';
 import { AppError } from '../infrastructure/error';
@@ -42,7 +39,6 @@ export class ConditionBuilderComponent implements OnInit {
         },
         canExecute: () => !!this.findLogicalNode(this.nodeService.current)
     });
-
     addRule = new Command({
         execute: () => {
             const current = this.nodeService.current;
@@ -52,8 +48,7 @@ export class ConditionBuilderComponent implements OnInit {
             if (current.id === '#condition') {
                 this.nodeService.current = rule;
             }
-        },
-        canExecute: () => !!this.findLogicalNode(this.nodeService.current)
+        }
     });
 
     remove = new Command({
@@ -77,6 +72,7 @@ export class ConditionBuilderComponent implements OnInit {
         execute: node => {
             const serializer = new SerializationService();
             this.node = serializer.deserialize(this.plan, node);
+            debugger;
             this.nodeService.current = this.node.children[0];
             return true;
         },
